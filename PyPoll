@@ -1,1 +1,74 @@
 
+import os 
+import csv
+
+#opening path the file is in the same directory than this script
+csvpath = os.path.join("election_data.csv")
+
+votes= []
+candidates=[]
+
+#I am opening the file stored in csvpath newline is saying which character is delimiting new line
+with open(csvpath, newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+#remove header
+    header = next(csvreader)
+
+    for row in csvreader:
+         votes.append(row[2])
+
+candidate=votes[0]   
+khan=0
+correy=0
+li=0
+tooley=0
+
+for i in range(len(votes)):
+    if candidate not in candidates:
+        candidates.append(candidate)
+    elif candidate == "Khan":
+        khan += 1
+    elif candidate == "Correy":
+        correy += 1        
+    elif candidate == "Li":
+        li += 1
+    elif candidate == "O'Tooley":
+        tooley += 1  
+    candidate=votes[i]
+
+totalvotes= len(votes)
+khanpercent="{:.1%}".format((khan/totalvotes))
+correypercent="{:.1%}".format((correy/totalvotes))
+lipercent="{:.1%}".format((li/totalvotes))
+tooleypercent="{:.1%}".format((tooley/totalvotes))
+
+if khanpercent > correypercent and khanpercent > lipercent and khanpercent > tooleypercent: 
+    winner = "Khan"
+elif correypercent > khanpercent and correypercent > lipercent and correypercent > tooleypercent:  
+    winner = "Correy"
+elif lipercent > khanpercent and lipercent > correypercent and lipercent > tooleypercent:  
+    winner = "Li"
+elif tooleypercent > khanpercent and tooleypercent > correypercent and tooleypercent > lipercent:
+    winner = "Tooley"              
+
+print("Election results")
+print("----------------------------")
+print(f"Total votes:{(len(votes))}")
+print(f"{candidates[0]}:{khanpercent}, {khan}")
+print(f"{candidates[1]}:{correypercent}, {correy}")
+print(f"{candidates[2]}:{lipercent}, {li}")
+print(f"{candidates[3]}:{tooleypercent}, {tooley}")
+print("----------------------------")
+print(f"Winner:{winner}")
+
+
+output = os.path.join('file2.txt')
+with open(output,'w') as writefile:
+    writefile.writelines('Election Results\n')
+    writefile.writelines('----------------------------' + '\n')
+    writefile.writelines(f'{candidates[0]}:{khanpercent}, {khan}'+ '\n')
+    writefile.writelines(f'{candidates[1]}:{correypercent}, {correy}'+ '\n')
+    writefile.writelines(f'{candidates[2]}:{lipercent}, {li}'+ '\n')
+    writefile.writelines(f'{candidates[3]}:{tooleypercent}, {tooley}'+ '\n')
+    writefile.writelines('----------------------------' + '\n')   
+    writefile.writelines(f'Winner:{winner}'+ '\n')
