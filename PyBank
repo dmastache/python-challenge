@@ -1,1 +1,62 @@
 
+import os 
+import csv
+
+#opening path the file is in the same directory than this script
+csvpath = os.path.join("budget_data.csv")
+
+date= []
+profit =[]
+
+#I am opening the file stored in csvpath newline is saying which character is delimiting new line
+with open(csvpath, newline='') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+#remove header
+    header = next(csvreader)
+
+    for row in csvreader:
+         date.append(row[0])
+         profit.append(int(row[1]))
+
+
+    def sum(numbers):
+            total=0.0
+            for number in numbers: 
+                total += number
+            return total
+
+greatestinc = profit[0]
+greatestdec = profit[0]
+total= 0.0
+
+for i in range(len(profit)):
+    if profit[i] >= greatestinc:
+        greatestinc = profit[i]
+        incmonth = date[i]
+    elif profit[i]<= greatestdec:
+        greatestdec = profit[i]
+        decmonth = date[i]
+        
+
+    
+
+months= len(date)
+totalprofit = sum(profit)
+average= totalprofit/months
+print(f"Total months:{months}") 
+print(f"Total profit:{totalprofit}")
+print (f"Average change: {average}")
+print(f"Greatest increase is {greatestinc} in month {incmonth}")
+print(f"Greatest decrease is {greatestdec} in month {decmonth}")
+
+
+
+output = os.path.join('file.txt')
+with open(output,'w') as writefile:
+    writefile.writelines('Financial Analysis\n')
+    writefile.writelines('----------------------------' + '\n')
+    writefile.writelines('Total Months: ' + str(months) + '\n')
+    writefile.writelines('Total Revenue: $' + str(totalprofit) + '\n')
+    writefile.writelines('Average Revenue Change: $' + str(average) + '\n')
+    writefile.writelines('Greatest Increase in Revenue: ' + incmonth + ' ($' + str(greatestinc) + ')'+ '\n')
+    writefile.writelines('Greatest Decrease in Revenue: ' + decmonth + ' ($' + str(greatestdec) + ')')
